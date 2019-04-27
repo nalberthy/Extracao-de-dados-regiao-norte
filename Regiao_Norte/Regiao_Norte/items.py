@@ -11,8 +11,7 @@ import scrapy
 class RegiaoNorteItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-
     titulo = scrapy.Field()
-    Resumo = scrapy.Field()
-    Data_Publicacao = scrapy.Field()
-
+    resumo = scrapy.Field()
+    data = scrapy.Field()
+    pass

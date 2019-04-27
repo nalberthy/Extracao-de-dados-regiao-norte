@@ -1,28 +1,28 @@
 # -*- coding: utf-8 -*-
 import scrapy
-
+from ..items import RegiaoNorteItem
 
 class SpiderUfamSpider(scrapy.Spider):
     name = 'spider_UFAM'
-    allowed_domains = ['http://riu.ufam.edu.br/simple-search?location=']
-    start_urls = ['http://http://riu.ufam.edu.br/simple-search?location=/']
+    start_urls = ['http://riu.ufam.edu.br/simple-search?query=saude+mental']
 
-    custom_settings = {
-        'ITEM_PIPELINES': {
-            'Regiao_Norte.pipelines.RegiaoNortePipeline': 400
-        },
-        'LOG_FILE': 'RegiaoNorte.log',
-        'FEED_FORMAT': 'csv',
-        'JOBDIR': 'crawls\\regiao',
-        'FEED_URI': 'ufam_resultado.csv'
-    }
+ 
 
-
-    def extracao ( self,response,link):
-        pass
 
     def parse(self, response):
-        for link in response.css('table.table td[headers = "t2"] a'):
-            yield extracao(self,response,link)
+        lista = response.css('td[headers = "t2"] a::attr(href)').extract()
+        for link in lista:
+            yield response.follow(link, self.extracao)
+        
+    def extracao(self,response):
+        itens = RegiaoNorteItem()
 
+        titulo = response.css('tbody tr:nth-child(2) td:nth-child(2) ::text').extract()
+        resumo= response.css('tbody :nth-child(5) td[class="metadataFieldValue"]').extract()
+        data = response.css('tbody :nth-child(17)').extract()
+        self.log(resumo)
+        itens['titulo']=titulo
+        itens['resumo']=resumo
+        itens['data']=data
+        yield 
 
