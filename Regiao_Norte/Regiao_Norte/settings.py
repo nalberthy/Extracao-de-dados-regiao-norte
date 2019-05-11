@@ -13,7 +13,7 @@ BOT_NAME = 'Regiao_Norte'
 
 SPIDER_MODULES = ['Regiao_Norte.spiders']
 NEWSPIDER_MODULE = 'Regiao_Norte.spiders'
-
+FEED_EXPORT_ENCODING  = 'utf-8'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'Regiao_Norte (+http://www.yourdomain.com)'

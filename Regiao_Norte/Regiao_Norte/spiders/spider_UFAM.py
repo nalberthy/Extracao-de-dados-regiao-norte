@@ -17,12 +17,12 @@ class SpiderUfamSpider(scrapy.Spider):
     def extracao(self,response):
         itens = RegiaoNorteItem()
 
-        titulo = response.css('tbody tr:nth-child(2) td:nth-child(2) ::text').extract()
-        resumo= response.css('tbody :nth-child(5) td[class="metadataFieldValue"]').extract()
-        data = response.css('tbody :nth-child(17)').extract()
+        titulo = response.css('tr:nth-child(2) td:nth-child(2) ::text').extract()
+        resumo= response.css(':nth-child(5) td[class="metadataFieldValue"]::text').extract()
+        data = response.xpath('//*[@id="content"]/div[2]/table/tr[17]/td[2]/text()').extract()
         self.log(resumo)
         itens['titulo']=titulo
         itens['resumo']=resumo
         itens['data']=data
-        yield 
+        yield itens
 
