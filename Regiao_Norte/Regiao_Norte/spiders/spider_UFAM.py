@@ -10,13 +10,19 @@ class SpiderUfamSpider(scrapy.Spider):
 
 
     def parse(self, response):
+        #Lista de artigos da página
         lista = response.css('td[headers = "t2"] a::attr(href)').extract()
+        #link de referência do botão next
+        next_page = response.css('div:nth-child(3) > div > div.col-md-9 > div.discovery-result-pagination.row > ul > li:nth-child(8) > a::attr(href)').get()
+        # Percorrer artigos da pagina
         for link in lista:
             yield response.follow(link, self.extracao)
-        
+        # Percorrer paginas    
+        if next_page is not None:
+            next_page = response.urljoin(next_page)
+            yield scrapy.Request(next_page, callback=self.parse)        
     def extracao(self,response):
         itens = RegiaoNorteItem()
-
         titulo = response.css('tr:nth-child(2) td:nth-child(2) ::text').extract()
         resumo= response.css(':nth-child(5) td[class="metadataFieldValue"]::text').extract()
         data = response.xpath('//*[@id="content"]/div[2]/table/tr[17]/td[2]/text()').extract()
@@ -25,4 +31,3 @@ class SpiderUfamSpider(scrapy.Spider):
         itens['resumo']=resumo
         itens['data']=data
         yield itens
-
