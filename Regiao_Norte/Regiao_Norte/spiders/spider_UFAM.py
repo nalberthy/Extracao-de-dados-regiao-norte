@@ -6,14 +6,11 @@ class SpiderUfamSpider(scrapy.Spider):
     name = 'spider_UFAM'
     start_urls = ['http://riu.ufam.edu.br/simple-search?query=saude+mental']
 
- 
-
-
     def parse(self, response):
         #Lista de artigos da página
         lista = response.css('td[headers = "t2"] a::attr(href)').extract()
         #link de referência do botão next
-        next_page = response.css('div:nth-child(3) > div > div.col-md-9 > div.discovery-result-pagination.row > ul > li:nth-child(8) > a::attr(href)').get()
+        next_page = response.css('.pagination  li:last-child > a::attr(href)').get()
         # Percorrer artigos da pagina
         for link in lista:
             yield response.follow(link, self.extracao)
