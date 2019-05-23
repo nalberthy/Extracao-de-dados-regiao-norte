@@ -20,9 +20,9 @@ class SpiderUfamSpider(scrapy.Spider):
             yield scrapy.Request(next_page, callback=self.parse)        
     def extracao(self,response):
         itens = RegiaoNorteItem()
-        titulo = response.css('tr:nth-child(2) td:nth-child(2) ::text').extract()
-        resumo= response.css(':nth-child(5) td[class="metadataFieldValue"]::text').extract()
-        data = response.xpath('//*[@id="content"]/div[2]/table/tr[17]/td[2]/text()').extract()
+        titulo = response.css('tr:nth-child(2) td:nth-child(2) ::text').extract_first()
+        resumo= response.css(':nth-child(5) td[class="metadataFieldValue"]::text').extract_first()
+        data = response.xpath('//*[@id="content"]/div[2]/table/tr[17]/td[2]/text()').extract_first()
         self.log(resumo)
         itens['titulo']=titulo
         itens['resumo']=resumo
