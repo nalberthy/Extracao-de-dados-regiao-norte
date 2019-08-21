@@ -14,4 +14,7 @@ class RegiaoNorteItem(scrapy.Item):
     titulo = scrapy.Field()
     resumo = scrapy.Field()
     data = scrapy.Field()
+    autores = scrapy.Field()
+    url = scrapy.Field()
+    palavrachave = scrapy.Field()
     pass

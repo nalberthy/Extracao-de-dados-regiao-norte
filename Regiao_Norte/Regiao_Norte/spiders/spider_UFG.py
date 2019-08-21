@@ -23,20 +23,23 @@ class SpiderUfgSpider(scrapy.Spider):
         itens = RegiaoNorteItem()
         campoDC  = response.css('td.metadataFieldLabel::text').extract()
         valor  = response.css('td:nth-child(2)::text').extract()
-        try:
-            itens['titulo'] = valor[campoDC.index('dc.title')]
-        except Exception:
-            itens['titulo'] =[]
-        try:
-            itens['resumo'] = valor[campoDC.index('dc.description.resumo')]
-        except Exception:
-            try:
-                itens['resumo'] = valor[campoDC.index('dc.description.abstract')]
-            except Exception:
-                itens['resumo'] =[]
-        try:
-            itens['data'] = valor[campoDC.index('dc.date.issued')]
-        except Exception:
-            itens['data'] =[]
+        autores = []
+        palavrachave = []
+        for i in range(len(campoDC)):
+            if campoDC[i] == 'dc.title':
+                itens['titulo'] = valor[i]
+            elif campoDC[i] == 'dc.description.resumo':
+                itens['resumo'] = valor[i]
+            elif campoDC[i] == 'dc.creator':
+                autores.append(valor[i])
+            elif campoDC[i] == 'dc.date.issued':
+                itens['data'] = valor[i]
+            elif campoDC[i] == 'dc.identifier.uri':
+                itens['url'] = valor[i]
+            elif campoDC[i] ==  'dc.subject':
+                palavrachave.append(valor[i])
+        itens['autores'] = autores
+        itens['palavrachave']= palavrachave
+
 
         yield itens
